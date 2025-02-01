@@ -1,0 +1,10 @@
+Windows Registry Editor Version 5.00
+[HKEY_CURRENT_USER\\\\Keyboard Layout]
+[HKEY_CURRENT_USER\\\\Keyboard Layout\\\\Preload]
+"1" = "00000409"
+"2" = "00000419"
+[HKEY_CURRENT_USER\\\\Keyboard Layout\\\Substitutes]
+[HKEY_CURRENT_USER\\\\Keyboard Layout\\\Toggle]
+"Hotkey" = "2"
+"Language Hotkey" = "2"
+"LayoutHotkey" = "2"

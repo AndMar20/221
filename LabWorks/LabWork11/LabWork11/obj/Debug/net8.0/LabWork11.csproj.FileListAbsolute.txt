@@ -1,0 +1,14 @@
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\bin\Debug\net8.0\LabWork11.exe
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\bin\Debug\net8.0\LabWork11.deps.json
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\bin\Debug\net8.0\LabWork11.runtimeconfig.json
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\bin\Debug\net8.0\LabWork11.dll
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\bin\Debug\net8.0\LabWork11.pdb
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\obj\Debug\net8.0\LabWork11.GeneratedMSBuildEditorConfig.editorconfig
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\obj\Debug\net8.0\LabWork11.AssemblyInfoInputs.cache
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\obj\Debug\net8.0\LabWork11.AssemblyInfo.cs
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\obj\Debug\net8.0\LabWork11.csproj.CoreCompileInputs.cache
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\obj\Debug\net8.0\LabWork11.dll
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\obj\Debug\net8.0\refint\LabWork11.dll
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\obj\Debug\net8.0\LabWork11.pdb
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\obj\Debug\net8.0\LabWork11.genruntimeconfig.cache
+C:\Temp\ispp21\LabWorks\LabWork11\LabWork11\obj\Debug\net8.0\ref\LabWork11.dll

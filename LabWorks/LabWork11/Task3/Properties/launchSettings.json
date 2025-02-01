@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Task3": {
+      "commandName": "Project",
+      "commandLineArgs": "-path \"C:\\Temp\\ispp21\\LabWorks\\LabWork11\\LabWork11.txt\" -input ISPP21",
+      "nativeDebugging": false
+    }
+  }
+}
