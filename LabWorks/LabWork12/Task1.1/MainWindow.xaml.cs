@@ -48,7 +48,7 @@ namespace Task1._1
             {
                 if (!long.TryParse(minSizeTextBox.Text, out minSize)) minSize = 0;
                 if (!long.TryParse(maxSizeTextBox.Text, out maxSize)) maxSize = long.MaxValue;
-                minSize *= 1024; // KB to Bytes
+                minSize *= 1024;
                 maxSize *= 1024;
             }
 
