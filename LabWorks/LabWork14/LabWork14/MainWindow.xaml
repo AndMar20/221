@@ -1,0 +1,35 @@
+﻿<Window x:Class="LabWork14.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LabWork14"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="10" Orientation="Horizontal">
+            <TextBlock Text="Имя каталога" Margin="2" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding FolderPath, Mode=TwoWay}"/>
+            <Button Content="Вывести все вложенные файлы" Command="{Binding SearchCommand}" CommandParameter="{Binding SearchString}" Margin="2"/>
+            <Button Content="Найти дупликаты" Command="{Binding FindDuplicate}"/>
+        </StackPanel>
+        <ListView Grid.Row="1" Margin="5">
+            <ItemSource ItemsSource="{Binding Dulicate}" x:Name="Duplicate"/>
+            <List.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                    <TextBlock Text="{Binding Key}"/>
+                </StackPanel>
+                    <I
+                    <ItemsControl.ItemTemplate>
+            </List.ItemTemplate>
+
+        </ListView>
+    </Grid>
+</Window>
