@@ -7,29 +7,36 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <StackPanel Margin="10" Orientation="Horizontal">
-            <TextBlock Text="Имя каталога" Margin="2" VerticalAlignment="Center"/>
-            <TextBox Text="{Binding FolderPath, Mode=TwoWay}"/>
-            <Button Content="Вывести все вложенные файлы" Command="{Binding SearchCommand}" CommandParameter="{Binding SearchString}" Margin="2"/>
-            <Button Content="Найти дупликаты" Command="{Binding FindDuplicate}"/>
-        </StackPanel>
-        <ListView Grid.Row="1" Margin="5">
-            <ItemSource ItemsSource="{Binding Dulicate}" x:Name="Duplicate"/>
-            <List.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                    <TextBlock Text="{Binding Key}"/>
-                </StackPanel>
-                    <I
-                    <ItemsControl.ItemTemplate>
-            </List.ItemTemplate>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="Файл">
+                    <MenuItem Header="Выбрать папку" Click="SelectFolder_Click"/>
+                    <MenuItem Header="Выход" Click="Exit_Click"/>
+                </MenuItem>
+            </Menu>
 
-        </ListView>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
+                <TextBlock Text="Фильтры: " VerticalAlignment="Center"/>
+                <CheckBox Content="По имени" IsChecked="{Binding SearchByName}"/>
+                <CheckBox Content="По размеру" IsChecked="{Binding SearchBySize}"/>
+                <CheckBox Content="По дате изменения" IsChecked="{Binding SearchByDate}"/>
+                <Button Content="Обновить" Click="SelectFolder_Click" Margin="5"/>
+            </StackPanel>
+
+            <DataGrid ItemsSource="{Binding DuplicateFiles}" SelectedItem="{Binding SelectedFile}"
+                      AutoGenerateColumns="False" Margin="10">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Имя" Binding="{Binding Name}" Width="200"/>
+                    <DataGridTextColumn Header="Путь" Binding="{Binding Path}" Width="300"/>
+                    <DataGridTextColumn Header="Размер (KB)" Binding="{Binding Size}" Width="100"/>
+                    <DataGridTextColumn Header="Дата изменения" Binding="{Binding LastModified}" Width="150"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                <Button Content="Открыть" Click="OpenFile_Click" Width="100"/>
+                <Button Content="Удалить" Click="DeleteFile_Click" Width="100" Margin="10,0,0,0"/>
+            </StackPanel>
+        </DockPanel>
     </Grid>
 </Window>

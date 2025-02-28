@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Task2": {
-      "commandName": "Project",
-      "commandLineArgs": "string path\r\nstring input"
-    }
-  }
-}

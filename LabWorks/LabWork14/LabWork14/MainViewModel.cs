@@ -1,109 +1,119 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Windows.Input;
+using System.Windows;
 
 namespace LabWork14
 {
-    public partial class MainViewModel : ViewModelBase
+    public class FileDuplicateInfo
     {
-        private string _folderPath;
-        private ObservableCollection<IGrouping<string, FileModel>> _duplicate = new ObservableCollection<IGrouping<string, FileModel>>();
+        public string Name { get; set; }
+        public string Path { get; set; }
+        public long Size { get; set; }
+        public DateTime LastModified { get; set; }
+    }
 
-        public string FolderPath
+    public class MainViewModel : INotifyPropertyChanged
+    {
+        private string _selectedDirectory;
+        private FileDuplicateInfo _selectedFile;
+
+        public string SelectedDirectory
         {
-            get { return _folderPath; }
-            set { _folderPath = value; OnPropertyChanged(nameof(FolderPath)); }
+            get => _selectedDirectory;
+            set { _selectedDirectory = value; OnPropertyChanged(nameof(SelectedDirectory)); }
         }
 
-        public ObservableCollection<IGrouping<string, FileModel>> Duplicate
+        public ObservableCollection<FileDuplicateInfo> DuplicateFiles { get; set; } = new();
+        public FileDuplicateInfo SelectedFile
         {
-            get { return _duplicate; }
-            set { _duplicate = value; OnPropertyChanged(nameof(Duplicate)); }
+            get => _selectedFile;
+            set { _selectedFile = value; OnPropertyChanged(nameof(SelectedFile)); }
         }
 
-        public ICommand BrowseFolderCommand { get; }
-        public ICommand FindDuplicateCommand { get; }
+        public bool SearchByName { get; set; } = true;
+        public bool SearchBySize { get; set; } = false;
+        public bool SearchByDate { get; set; } = false;
 
-        public MainViewModel()
+        public void SelectFolder()
         {
-            BrowseFolderCommand = new RelayCommand(BrowseFolder);
-            FindDuplicateCommand = new RelayCommand(async () => await FindDuplicate());
-        }
-
-        private void BrowseFolder()
-        {
-            var dialog = new FolderBrowserDialog();
-            DialogResult result = dialog.ShowDialog();
-            if (result == DialogResult.OK)
+            var dialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                FolderPath = dialog.SelectedPath;
+                SelectedDirectory = dialog.SelectedPath;
+                FindDuplicateFiles();
             }
         }
 
-        private async Task FindDuplicate()
+        private void FindDuplicateFiles()
         {
-            if (string.IsNullOrEmpty(FolderPath) || Directory.Exists(FolderPath))
+            DuplicateFiles.Clear();
+            if (string.IsNullOrEmpty(SelectedDirectory) || !Directory.Exists(SelectedDirectory))
             {
-                MessageBox.Show("Каталог выбран неверно");
+                System.Windows.MessageBox.Show("Выберите папку для поиска!");
                 return;
             }
 
-            Duplicate = await Task.Run(() => GetDuplicate());
+            var files = Directory.GetFiles(SelectedDirectory, "*.*", SearchOption.AllDirectories)
+                .Select(f => new FileInfo(f))
+                .ToList();
+
+            var groupedFiles = files.GroupBy(f => new
+            {
+                Name = SearchByName ? f.Name : null,
+                Size = SearchBySize ? f.Length : (long?)null,
+                Date = SearchByDate ? f.LastWriteTime.Date : (DateTime?)null
+            });
+
+            foreach (var group in groupedFiles)
+            {
+                if (group.Count() > 1)
+                {
+                    foreach (var file in group)
+                    {
+                        DuplicateFiles.Add(new FileDuplicateInfo
+                        {
+                            Name = file.Name,
+                            Path = file.FullName,
+                            Size = file.Length,
+                            LastModified = file.LastWriteTime
+                        });
+                    }
+                }
+            }
+
+            if (DuplicateFiles.Count == 0)
+            {
+                System.Windows.MessageBox.Show("Дубликаты не найдены.");
+            }
         }
 
-        private ObservableCollection<IGrouping<string, FileModel>> GetDuplicate()
+        public void OpenFile()
         {
-            try
+            if (SelectedFile != null)
             {
-                var files = Directory.GetFiles(FolderPath, "*", SearchOption.AllDirectories);
-                var fileModels = files.Select(file => new FileModel(file));
-                var duplicateGroups = fileModels
-                    .GroupBy(file => file.FileName)
-                    .Where(g => g.Count() > 1);
-                return new ObservableCollection<IGrouping<string, FileModel>>(duplicateGroups);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("ERROR");
-                return new ObservableCollection<IGrouping<string, FileModel>>();
+                System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{SelectedFile.Path}\"");
             }
         }
+
+        public void DeleteFile()
+        {
+            if (SelectedFile != null && System.Windows.MessageBox.Show("Удалить этот файл?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    File.Delete(SelectedFile.Path);
+                    DuplicateFiles.Remove(SelectedFile);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"Ошибка удаления: {ex.Message}");
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public class RelayCommand : ICommand
-        {
-            private readonly Action _execute;
-            private readonly Func<bool> _canExecute;
-
-            public RelayCommand(Action execute, Func<bool> canExecute = null)
-            {
-                _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-                _canExecute = canExecute;
-            }
-            public bool CanExecute(object parameter)
-            {
-                return _canExecute == null || _canExecute();
-            }
-            public void Execute(object parameter)
-            {
-                _execute();
-            }
-            public event EventHandler CanExecuteChanged
-            {
-                add
-                {
-                    CommandManager.RequerySuggested += value;
-                }
-                remove
-                {
-                    CommandManager.RequerySuggested -= value;
-                }
-            }
-        }
+        protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }
+

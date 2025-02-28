@@ -1,14 +1,4 @@
-﻿using CommunityToolkit.Mvvm;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace LabWork14
 {
@@ -17,10 +7,31 @@ namespace LabWork14
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainViewModel ViewModel => DataContext as MainViewModel;
+
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new MainViewModel();
+        }
+
+        private void SelectFolder_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.SelectFolder();
+        }
+
+        private void OpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.OpenFile();
+        }
+
+        private void DeleteFile_Click(object sender, RoutedEventArgs e)
+        {
+            ViewModel?.DeleteFile();
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Application.Current.Shutdown();
         }
     }
 }
